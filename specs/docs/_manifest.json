@@ -1,0 +1,17 @@
+{
+  "origin": "https://opencode.ai",
+  "openapi": {
+    "file": "openapi.json",
+    "source": "https://opencode.ai/openapi.json",
+    "version": "3.1.0",
+    "infoVersion": "1.0.0",
+    "paths": 162
+  },
+  "docs": [
+    {
+      "path": "server.md",
+      "source": "https://opencode.ai/docs/server.md",
+      "bytes": 18153
+    }
+  ]
+}
