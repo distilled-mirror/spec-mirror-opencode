@@ -5207,7 +5207,8 @@
                     "skill",
                     "shell",
                     "assistant",
-                    "compaction"
+                    "compaction",
+                    "idle"
                   ]
                 },
                 {
