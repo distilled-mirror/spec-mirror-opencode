@@ -15005,6 +15005,9 @@
               "portable_shell_scanner": {
                 "type": "boolean"
               },
+              "todo": {
+                "type": "boolean"
+              },
               "subagent_depth": {
                 "type": "integer",
                 "minimum": 0
@@ -18247,6 +18250,9 @@
           "supportsPromptCacheKey": {
             "type": "boolean"
           },
+          "streamUsage": {
+            "type": "boolean"
+          },
           "cacheFormat": {
             "$ref": "#/components/schemas/Model.CacheFormat"
           },
@@ -19592,6 +19598,9 @@
             "type": "boolean"
           },
           "supportsPromptCacheKey": {
+            "type": "boolean"
+          },
+          "streamUsage": {
             "type": "boolean"
           },
           "cacheFormat": {
