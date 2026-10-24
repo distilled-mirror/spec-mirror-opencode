@@ -5,13 +5,13 @@
     "source": "https://opencode.ai/openapi.json",
     "version": "3.1.0",
     "infoVersion": "0.0.1",
-    "paths": 124
+    "paths": 123
   },
   "docs": [
     {
       "path": "server.md",
       "source": "https://opencode.ai/docs/server.md",
-      "bytes": 17610
+      "bytes": 17791
     }
   ]
 }
