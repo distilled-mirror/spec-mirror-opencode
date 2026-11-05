@@ -7195,7 +7195,7 @@
             }
           }
         },
-        "description": "Complete a code-based OAuth attempt and store the resulting credential.",
+        "description": "Complete a code-based OAuth attempt and store the resulting credential. For an automatic attempt with `paste`, `code` is the redirect URL copied from the browser, and the result arrives through the attempt status.",
         "summary": "Complete OAuth connection",
         "requestBody": {
           "content": {
@@ -17235,7 +17235,8 @@
                     "integration.use",
                     "mcp.use",
                     "skill.use",
-                    "plugin.use"
+                    "plugin.use",
+                    "websearch.use"
                   ]
                 },
                 "resource": {
@@ -17526,6 +17527,9 @@
               "portable_shell_scanner": {
                 "type": "boolean"
               },
+              "all_flags": {
+                "type": "boolean"
+              },
               "todo": {
                 "type": "boolean"
               },
@@ -17533,6 +17537,15 @@
                 "type": "boolean"
               },
               "media_blob": {
+                "type": "boolean"
+              },
+              "schedules": {
+                "type": "boolean"
+              },
+              "artifacts": {
+                "type": "boolean"
+              },
+              "part_rows": {
                 "type": "boolean"
               },
               "image_generate": {
@@ -17578,12 +17591,6 @@
                   }
                 ]
               },
-              "schedules": {
-                "type": "boolean"
-              },
-              "artifacts": {
-                "type": "boolean"
-              },
               "subagent_depth": {
                 "type": "integer",
                 "minimum": 0,
@@ -17616,7 +17623,8 @@
                         "integration.use",
                         "mcp.use",
                         "skill.use",
-                        "plugin.use"
+                        "plugin.use",
+                        "websearch.use"
                       ]
                     },
                     "resource": {
@@ -20606,6 +20614,12 @@
               "code"
             ]
           },
+          "paste": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
           "time": {
             "type": "object",
             "properties": {
@@ -21809,6 +21823,9 @@
           },
           "protocol": {
             "$ref": "#/components/schemas/Mcp.Protocol"
+          },
+          "pool": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -21912,6 +21929,9 @@
           },
           "protocol": {
             "$ref": "#/components/schemas/Mcp.Protocol"
+          },
+          "pool": {
+            "type": "boolean"
           }
         },
         "required": [
