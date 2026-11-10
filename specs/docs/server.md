@@ -1,5 +1,6 @@
-import config from "../../../config.mjs"
-export const typesUrl = `${config.github}/blob/dev/packages/sdk/js/src/gen/types.gen.ts`
+# Server
+
+> These are the docs for OpenCode V1. The latest docs, for OpenCode V2, are at https://opencode.ai/docs/llms.txt.
 
 The `opencode serve` command runs a headless HTTP server that exposes an OpenAPI endpoint that an opencode client can use.
 

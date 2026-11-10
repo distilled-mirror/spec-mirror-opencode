@@ -360,16 +360,6 @@
                 }
               }
             }
-          },
-          "503": {
-            "description": "ServiceUnavailableError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServiceUnavailableErrorEncoded"
-                }
-              }
-            }
           }
         },
         "description": "Retrieve currently registered agents.",
@@ -3974,7 +3964,7 @@
             }
           }
         },
-        "description": "Generate transient text from the current session context without mutating session history.",
+        "description": "Generate transient text from the current session context without mutating session history. Its tokens and cost count toward the session's totals.",
         "summary": "Generate text from session context",
         "requestBody": {
           "content": {
@@ -10412,16 +10402,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LocationNotFoundErrorEncoded"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "ServiceUnavailableError",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServiceUnavailableErrorEncoded"
                 }
               }
             }
@@ -20354,6 +20334,18 @@
           },
           "instructions": {
             "type": "string"
+          },
+          "criteria": {
+            "type": "object",
+            "properties": {
+              "true": {
+                "type": "string"
+              },
+              "false": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
@@ -26890,10 +26882,18 @@
             "properties": {
               "text": {
                 "type": "string"
+              },
+              "tokens": {
+                "$ref": "#/components/schemas/TokenUsage.Info"
+              },
+              "cost": {
+                "$ref": "#/components/schemas/Money.USD"
               }
             },
             "required": [
-              "text"
+              "text",
+              "tokens",
+              "cost"
             ],
             "additionalProperties": false
           }
@@ -29129,9 +29129,20 @@
             "$ref": "#/components/schemas/Location.Ref"
           },
           "data": {
-            "not": {
-              "type": "null"
-            }
+            "type": "object",
+            "properties": {
+              "integrationID": {
+                "$ref": "#/components/schemas/Integration.ID"
+              },
+              "credentialID": {
+                "$ref": "#/components/schemas/Credential.ID"
+              }
+            },
+            "required": [
+              "integrationID",
+              "credentialID"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -34015,7 +34026,8 @@
                 "type": "string",
                 "enum": [
                   "title",
-                  "compaction"
+                  "compaction",
+                  "generate"
                 ]
               },
               "cost": {
