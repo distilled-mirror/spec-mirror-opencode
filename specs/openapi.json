@@ -17538,6 +17538,12 @@
               "codemode_vm": {
                 "type": "boolean"
               },
+              "shell_timeout_background": {
+                "type": "boolean"
+              },
+              "console_watches": {
+                "type": "boolean"
+              },
               "part_rows": {
                 "type": "boolean"
               },
