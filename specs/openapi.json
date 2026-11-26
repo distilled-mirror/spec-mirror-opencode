@@ -2259,7 +2259,7 @@
             }
           }
         },
-        "description": "Send a user message and start the agent unless resume is false. Returns once the message is queued, not when the agent finishes: wait with experimental.session.wait or the session.execution.* events, then read the reply with session.message.list.",
+        "description": "Send a user message and start the agent unless resume is false. Returns once the message is queued, not when the agent finishes: wait with POST /api/experimental/session/:sessionID/wait or the session.execution.* events, then read the reply with GET /api/session/:sessionID/message. An archived session is unarchived.",
         "summary": "Send message",
         "requestBody": {
           "content": {
@@ -2408,7 +2408,7 @@
             }
           }
         },
-        "description": "Run a named command in the session. Most commands send a prompt, so like session.prompt this returns before the agent finishes.",
+        "description": "Run a named command in the session. Most commands send a prompt, so like session.prompt this returns before the agent finishes. An archived session is unarchived.",
         "summary": "Run command",
         "requestBody": {
           "content": {
@@ -2536,7 +2536,7 @@
             }
           }
         },
-        "description": "Activate a skill for a session by appending a skill message and resuming execution.",
+        "description": "Activate a skill for a session by appending a skill message and resuming execution. An archived session is unarchived.",
         "summary": "Activate skill",
         "requestBody": {
           "content": {
@@ -2776,7 +2776,7 @@
             }
           }
         },
-        "description": "Execute one shell command in the session's working directory. Emits a shell.started event before execution and a shell.ended event with the merged output after.",
+        "description": "Execute one shell command in the session's working directory. Emits a shell.started event before execution and a shell.ended event with the merged output after. An archived session is unarchived.",
         "summary": "Run shell command",
         "requestBody": {
           "content": {
@@ -13149,6 +13149,61 @@
         "summary": "Read a blob"
       }
     },
+    "/api/experimental/browser/tunnel": {
+      "get": {
+        "tags": [
+          "experimental"
+        ],
+        "operationId": "experimental.browser.tunnel",
+        "parameters": [],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "InvalidRequestError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidRequestErrorEncoded"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnauthorizedError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedErrorEncoded"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "ForbiddenError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenErrorEncoded"
+                }
+              }
+            }
+          }
+        },
+        "description": "Upgrade to a binary WebSocket carrying multiplexed TCP streams for one live desktop browser attachment. Requires a short-lived, single-use attachment-bound ticket in the x-opencode-browser-ticket header minted through authenticated browser RPC. Never accepts a session ID or browser cookie alone. Experimental: may change without compatibility guarantees.",
+        "summary": "Open a browser attachment binary stream tunnel",
+        "x-websocket": true
+      }
+    },
     "/api/experimental/automation": {
       "post": {
         "tags": [
@@ -17856,6 +17911,102 @@
         "summary": "Get usage limits"
       }
     },
+    "/api/experimental/flag": {
+      "get": {
+        "tags": [
+          "flag"
+        ],
+        "operationId": "experimental.flag.get",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "directory": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Absolute path of the directory."
+                }
+              },
+              "additionalProperties": false
+            },
+            "required": false,
+            "style": "deepObject",
+            "explode": true,
+            "description": "Location to run the request in, sent as location[directory]. Omit to use the server's default location."
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "location": {
+                      "$ref": "#/components/schemas/Location.PublicRef"
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "required": [
+                    "location",
+                    "data"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "InvalidRequestError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidRequestErrorEncoded"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnauthorizedError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedErrorEncoded"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "LocationNotFoundError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNotFoundErrorEncoded"
+                }
+              }
+            }
+          }
+        },
+        "description": "Experimental. Return the resolved feature flags the location's clients may act on, keyed by flag name. Flags not listed are off.",
+        "summary": "Get feature flags"
+      }
+    },
     "/api/config": {
       "get": {
         "tags": [
@@ -19580,6 +19731,9 @@
               "full_codemode": {
                 "type": "boolean"
               },
+              "codemode_agents": {
+                "type": "boolean"
+              },
               "machines": {
                 "type": "boolean"
               },
@@ -19595,7 +19749,13 @@
               "mcp_skills": {
                 "type": "boolean"
               },
+              "compaction_jobs": {
+                "type": "boolean"
+              },
               "sqlite_fts": {
+                "type": "boolean"
+              },
+              "browser_stream_tunnel": {
                 "type": "boolean"
               },
               "video_generate": {
@@ -37557,6 +37717,10 @@
     {
       "name": "usage",
       "description": "Experimental usage limit routes."
+    },
+    {
+      "name": "flag",
+      "description": "Experimental feature flag routes."
     },
     {
       "name": "config",
